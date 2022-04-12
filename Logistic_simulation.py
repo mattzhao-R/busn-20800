@@ -201,8 +201,8 @@ def Gradient_descent(X, y, stepsize, iteration):
             #print(theta)
             #print(np.multiply(stepsize,(np.array(Get_gradient_formula(theta,X,y))*-1)))
             #theta =  theta -  np.multiply(stepsize,(np.array(Get_gradient_numeric(theta,X,y))))
-            theta =  theta - stepsize*np.array(Get_gradient_numeric(theta,X,y))*-1
-            print("theta - stepsize*np.array(Get_gradient_numeric(theta,X,y))*-1")
+            theta =  theta - stepsize*np.array(Get_gradient_formula(theta,X,y))*-1
+            #print("theta - stepsize*np.array(Get_gradient_formula(theta,X,y))*-1")
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
