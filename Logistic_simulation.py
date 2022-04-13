@@ -60,9 +60,10 @@ def lossFunc(theta, X, y):
     ##############################################################################
     ### TODO: Code up the loss function for logistic regression                ###
     ##############################################################################
-    #funcx = sigmoid(np.matmul(X,theta))
-    #J=(-y * np.log(funcx) - (1 - y) * np.log(1 - funcx)).sum()
-    J=(np.log(1/sigmoid(np.matmul(X,theta))) - np.matmul(np.transpose(theta),np.matmul(np.transpose(X),y))).sum()
+    #J=(np.log(1+np.exp(np.matmul(X,theta))) - np.matmul(np.transpose(theta),np.matmul(np.transpose(X),y))).sum()
+    LHS = -y * np.log(sigmoid(np.matmul(X,theta)))
+    RHS = (1 - y) * np.log(1 - sigmoid(np.matmul(X,theta)))
+    J = (LHS-RHS).sum()
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -112,7 +113,7 @@ def Get_gradient_formula(theta, X, y):
     ### TODO: Calculate gradient using formula                                 ###
     ##############################################################################
     funcx = sigmoid(np.matmul(X,theta))
-    gradient = np.matmul(np.transpose(X),(y-funcx))
+    gradient = np.matmul(np.transpose(X),(funcx-y))
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
