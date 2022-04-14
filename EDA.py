@@ -124,13 +124,26 @@ def Get_map_visualize(df, x = 'addr_state',y ='loan_status'):
        Output:
        The map for specific variable x respect to default group
        '''
+    df_num = df.copy()
+    # convert loan_status to binary
+    df_num[y] = loan_data[y] == "Fully Paid"
+    grouped_df = df_num.groupby(x)[y].mean().reset_index()
+    fig = go.Figure(data=go.Choropleth(
+        locations=grouped_df[x], # Spatial coordinates
+        z = grouped_df[y].astype(float), # Data to be color-coded
+        locationmode = 'USA-states', # set of locations match entries in `locations`
+        colorscale = 'Reds',
+        colorbar_title = "Percentage Fully Paid",
+    ))
 
-    ##############################################################################
-    ### TODO: Get the map plot                                                 ###
-    ##############################################################################
+    fig.update_layout(
+        title_text = 'Loan Status by State',
+        geo_scope='usa', # limite map scope to USA
+    )
 
-
-
+    fig.show()
+    # plotly did not show in jupyter ntb because node.js is out of data so this is a work-around
+    fig.write_image("images/loan_status.png")
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
