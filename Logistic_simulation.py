@@ -194,7 +194,7 @@ def Gradient_descent(X, y, stepsize, iteration):
 
     '''
     # Initial theta value
-    theta = np.array([[0,0]]).T
+    theta = np.zeros(shape=x.shape[1]).T
     ##############################################################################
     ### TODO: Perform Gradient Descent algorithm                             ###
     ##############################################################################
