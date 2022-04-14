@@ -194,7 +194,7 @@ def Gradient_descent(X, y, stepsize, iteration):
 
     '''
     # Initial theta value
-    theta = np.zeros(shape=x.shape[1]).T
+    theta = np.zeros(shape=X.shape[1]).T
     ##############################################################################
     ### TODO: Perform Gradient Descent algorithm                             ###
     ##############################################################################
@@ -230,7 +230,7 @@ def Generate_boundary(df, degree):
     ##############################################################################
     ### TODO: Generate the polynominal regressors as X                         ###
     ##############################################################################
-    
+    X = mapFeature(df.iloc[:,0],df.iloc[:,1],degree)
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -252,8 +252,8 @@ def Generate_boundary(df, degree):
     sns.scatterplot(x='Feature 1', y='Feature 2', hue='Label', data=df)
     plt.title('Decision boundary')
 
-    x = min(X['Feature 1'].min(), X['Feature 2'].min()) -0.5
-    y = max(X['Feature 1'].max(), X['Feature 2'].max()) +0.5
+    x = min(X[:,0].min(), X[:,1].min()) -0.5
+    y = max(X[:,0].max(), X[:,1].max()) +0.5
 
     plotDecisionBoundary(theta, degree, x, y)
         
