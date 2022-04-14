@@ -4,6 +4,7 @@
 
 import statsmodels.api as sm
 import pandas as pd
+from Logistic_simulation import Gradient_descent
 
 def Logistic_regression(X,y):
     '''
@@ -22,9 +23,15 @@ def Logistic_regression(X,y):
     ### TODO: Perform the logistic regression to predict default situation     ###
     ##############################################################################
     # Step 1. Construct the logistic model
-
+    logit_model = sm.Logit(y, X).fit()
+    result = logit_model
+    
     # Step 2. Get the p_value for each variable
-
+    logit_p = pd.DataFrame(logit_model.summary().tables[1])
+    logit_p.columns = logit_p.iloc[0,:]
+    logit_p = logit_p.iloc[1:]
+    p_value = pd.DataFrame(logit_p.iloc[:,4])
+    
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
