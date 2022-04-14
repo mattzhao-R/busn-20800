@@ -4,7 +4,6 @@
 
 import statsmodels.api as sm
 import pandas as pd
-from Logistic_simulation import Gradient_descent
 
 def Logistic_regression(X,y):
     '''

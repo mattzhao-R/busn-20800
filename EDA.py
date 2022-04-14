@@ -8,6 +8,8 @@ import seaborn as sns
 sns.set(style='white')
 sns.set(style='whitegrid', color_codes=True)
 import pandas as pd
+import geopandas as gpd
+
 from wordcloud import WordCloud
 
 import chart_studio
@@ -34,8 +36,12 @@ def Get_numeric_visualize(df,x,y='loan_status'):
     ##############################################################################
     ### TODO: Get density for specific variable x                              ###
     ##############################################################################
+    sns.kdeplot(data=df.loc[df[y] == 'Fully Paid'], x=x, shade = True, bw_adjust=3, label = "Fully Paid")
 
+    sns.kdeplot(data=df.loc[df[y] == 'Charged Off'], x=x, shade = True, bw_adjust=3, label = "Charged Off")
 
+    plt.legend()
+    plt.title("Effect of Interest Rate on Loan Status")
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -56,7 +62,10 @@ def Get_category_visualize(df,x,y = 'loan_status'):
     ##############################################################################
     ### TODO: Get count bar plot for specific variable x                       ###
     ##############################################################################
-
+    sns.countplot(x= x, hue = y, data = df, palette ='hls')
+    plt.xlabel(x)
+    plt.ylabel('Size')
+    plt.show()
 
 
     ##############################################################################
@@ -78,8 +87,26 @@ def Get_text_visualize(df,x,y = 'loan_status'):
     ##############################################################################
     ### TODO: Get wordcloud for specific variable x(text data)                 ###
     ##############################################################################
+    wc = WordCloud(
+      background_color='white', 
+      max_words=200, 
+      max_font_size=100 , 
+     scale=32)
+    wc2 = WordCloud(
+         background_color='white', 
+         max_words=200, 
+         max_font_size=100 , 
+         scale=32)
 
+    wc.generate_from_frequencies(dict(df.loc[df[y] == 'Fully Paid'].value_counts(x)))
+    wc2.generate_from_frequencies(dict(df.loc[df[y] == 'Charged Off'].value_counts(x)))
+    plt.figure(1)
+    plt.imshow(wc, interpolation="bilinear")
+    plt.axis("off")
 
+    plt.figure(2)
+    plt.imshow(wc2, interpolation="bilinear")
+    plt.axis("off")
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
