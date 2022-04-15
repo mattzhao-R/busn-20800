@@ -126,7 +126,7 @@ def Get_map_visualize(df, x = 'addr_state',y ='loan_status'):
        '''
     df_num = df.copy()
     # convert loan_status to binary
-    df_num[y] = loan_data[y] == "Fully Paid"
+    df_num[y] = df[y] == "Fully Paid"
     grouped_df = df_num.groupby(x)[y].mean().reset_index()
     fig = go.Figure(data=go.Choropleth(
         locations=grouped_df[x], # Spatial coordinates
@@ -142,8 +142,8 @@ def Get_map_visualize(df, x = 'addr_state',y ='loan_status'):
     )
 
     fig.show()
-    # plotly did not show in jupyter ntb because node.js is out of data so this is a work-around
-    fig.write_image("images/loan_status.png")
+    # plotly did not show in jupyter ntb because node.js is out of date so this is a work-around
+    fig.write_image("loan_status.png")
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
