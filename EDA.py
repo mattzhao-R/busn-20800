@@ -41,7 +41,7 @@ def Get_numeric_visualize(df,x,y='loan_status'):
     sns.kdeplot(data=df.loc[df[y] == 'Charged Off'], x=x, shade = True, bw_adjust=3, label = "Charged Off")
 
     plt.legend()
-    plt.title("Effect of Interest Rate on Loan Status")
+    plt.title("Effect of variable on Loan Status")
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
