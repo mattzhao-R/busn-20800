@@ -60,10 +60,9 @@ def lossFunc(theta, X, y):
     ##############################################################################
     ### TODO: Code up the loss function for logistic regression                ###
     ##############################################################################
-    #J=(np.log(1+np.exp(np.matmul(X,theta))) - np.matmul(np.transpose(theta),np.matmul(np.transpose(X),y))).sum()
-    LHS = -y * np.log(sigmoid(np.matmul(X,theta)))
-    RHS = (1 - y) * np.log(1 - sigmoid(np.matmul(X,theta)))
-    J = (LHS-RHS).sum()
+    #funcx = sigmoid(np.matmul(X,theta))
+    #J=(-y * np.log(funcx) - (1 - y) * np.log(1 - funcx)).sum()
+    J=(np.log(1/sigmoid(np.matmul(X,theta))) - np.matmul(np.transpose(theta),np.matmul(np.transpose(X),y))).sum()
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -113,7 +112,7 @@ def Get_gradient_formula(theta, X, y):
     ### TODO: Calculate gradient using formula                                 ###
     ##############################################################################
     funcx = sigmoid(np.matmul(X,theta))
-    gradient = np.matmul(np.transpose(X),(funcx-y))
+    gradient = np.matmul(np.transpose(X),(y-funcx))
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -194,16 +193,14 @@ def Gradient_descent(X, y, stepsize, iteration):
 
     '''
     # Initial theta value
-    theta = np.zeros(shape=X.shape[1]).T
+    theta = np.zeros(X.shape[1])
     ##############################################################################
     ### TODO: Perform Gradient Descent algorithm                             ###
     ##############################################################################
     for x in range(iteration):
-            #print(theta)
-            #print(np.multiply(stepsize,(np.array(Get_gradient_formula(theta,X,y))*-1)))
-            #theta =  theta -  np.multiply(stepsize,(np.array(Get_gradient_numeric(theta,X,y))))
-            theta =  theta - stepsize*np.array(Get_gradient_formula(theta,X,y))
-            #print("theta - stepsize*np.array(Get_gradient_formula(theta,X,y))*-1")
+            print(theta)
+            print(np.multiply(stepsize,(np.array(Get_gradient_numeric(theta,X,y))*-1)))
+            theta = np.add(theta,((np.array(Get_gradient_numeric(theta,X,y))*-1)*stepsize))
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -230,7 +227,7 @@ def Generate_boundary(df, degree):
     ##############################################################################
     ### TODO: Generate the polynominal regressors as X                         ###
     ##############################################################################
-    X = mapFeature(df.iloc[:,0],df.iloc[:,1],degree)
+    
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -244,24 +241,16 @@ def Generate_boundary(df, degree):
     plt.figure(figsize=(12, 6))
     # Input data
     plt.subplot(1, 2, 1)
-<<<<<<< HEAD
-    sns.scatterplot(x='Feature 1', y='Feature 2', hue='Label', data=df, alpha=.1)
-=======
     sns.scatterplot(x='Feature 1', y='Feature 2', hue='Label', data=df)
->>>>>>> 2fc661e3338762e092c6ebded66c899b07855b24
     plt.title('Input data')
 
     # Decision boundary
     plt.subplot(1, 2, 2)
-<<<<<<< HEAD
-    sns.scatterplot(x='Feature 1', y='Feature 2', hue='Label', data=df, alpha=.1)
-=======
     sns.scatterplot(x='Feature 1', y='Feature 2', hue='Label', data=df)
->>>>>>> 2fc661e3338762e092c6ebded66c899b07855b24
     plt.title('Decision boundary')
 
-    x = min(X[:,0].min(), X[:,1].min()) -0.5
-    y = max(X[:,0].max(), X[:,1].max()) +0.5
+    x = min(X['Feature 1'].min(), X['Feature 2'].min()) -0.5
+    y = max(X['Feature 1'].max(), X['Feature 2'].max()) +0.5
 
     plotDecisionBoundary(theta, degree, x, y)
         
