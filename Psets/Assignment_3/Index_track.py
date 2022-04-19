@@ -34,7 +34,7 @@ def Normalize(df):
     return df_stdize
 
 
-def Portfolio_construction(df):
+def Portfolio_construction(df, alp):
     '''
        Use this function to construct your portfolio.
 
@@ -46,7 +46,7 @@ def Portfolio_construction(df):
 
        Output:
        portfolio_weight : Array, the assigned weight for each stock to track the S&P 500 index.
-       y_ture           : Array, Real index OOS return
+       y_true           : Array, Real index OOS return
        y_predict        : Array, Your predicted OOS return
 
     '''
@@ -70,15 +70,28 @@ def Portfolio_construction(df):
     ### TODO: Design your portfolio construction method here                   ###
     ##############################################################################
     # Initialization
+
     portfolio_weight = np.zeros(X.shape[0])
     y_true = y_test
     y_predict = np.zeros(len(y_test))
+    
+    lasso = Lasso(alpha = alp) 
+    lasso.fit(X_train, y_train)
+    y_predict = lasso.predict(X_test)
+    portfolio_weight = lasso.coef_
+    
+
+
+    
+
+
+
+
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
     return portfolio_weight, y_true, y_predict
-
-
+    
 def Portfolio_visualize(y_true, y_predict):
     '''
        Use this function to visualize your portfolio.
@@ -138,6 +151,16 @@ def Portfolio_rebalance(df, window):
         # Initialization
         portfolio_weight = np.zeros(X.shape[0])
         y_predict = np.zeros(len(y))
+
+
+        lasso = Lasso(alpha = .05) 
+        lasso.fit(X_train, y_train)
+        y_predict = lasso.predict(X_test)
+        portfolio_weight = lasso.coef_
+    
+
+
+
         ##############################################################################
         #                               END OF YOUR CODE                             #
         ##############################################################################
