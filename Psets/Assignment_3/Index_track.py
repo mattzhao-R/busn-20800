@@ -101,12 +101,17 @@ def Portfolio_visualize(y_true, y_predict):
        y_ture           : Array, Real index OOS return
        y_predict        : Array, Your predicted OOS return
     '''
-
-    df = pd.concat([y_true, y_predict], axis=1)
+    #custom code
+    df = pd.DataFrame(y_true)
+    df['Portfolio return'] = y_predict
     df.columns = ['Index return', 'Portfolio return']
+    np.cumsum(df).plot()
+    
+    #df = pd.concat([y_true, y_predict], axis=1)
+    #df.columns = ['Index return', 'Portfolio return']
 
     # Plot the cumulative return
-    np.cumsum(df).plot()
+    #np.cumsum(df).plot()
 
 
 def Portfolio_rebalance(df, window):
