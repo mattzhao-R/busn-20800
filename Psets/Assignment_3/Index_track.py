@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 plt.rc('font', size=14)
 import seaborn as sns
 sns.set_theme(context='notebook', style='whitegrid', palette='deep', font='sans-serif', font_scale=1, color_codes=True,rc={'figure.figsize':(12,8)})
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import Lasso, LassoCV
 from sklearn.preprocessing import StandardScaler
 
 
@@ -34,7 +34,7 @@ def Normalize(df):
     return df_stdize
 
 
-def Portfolio_construction(df, alp):
+def Portfolio_construction(df,set_alp = False,alp=0):
     '''
        Use this function to construct your portfolio.
 
@@ -70,22 +70,22 @@ def Portfolio_construction(df, alp):
     ### TODO: Design your portfolio construction method here                   ###
     ##############################################################################
     # Initialization
-
     portfolio_weight = np.zeros(X.shape[0])
     y_true = y_test
     y_predict = np.zeros(len(y_test))
     
-    lasso = Lasso(alpha = alp) 
-    lasso.fit(X_train, y_train)
+    # Get coefficients (portfolio weights)    
+    if(set_alp == True):
+        alpha_ = alp
+    else:
+        model = LassoCV(cv = 5, random_state = 0, max_iter = 10000)
+        model.fit(X_train, y_train)
+        alpha_ = model.alpha_
+
+    lasso = Lasso(max_iter = 10000)
+    lasso.set_params(alpha=alpha_).fit(X_train,y_train)
     y_predict = lasso.predict(X_test)
     portfolio_weight = lasso.coef_
-    
-
-
-    
-
-
-
 
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -114,7 +114,7 @@ def Portfolio_visualize(y_true, y_predict):
     #np.cumsum(df).plot()
 
 
-def Portfolio_rebalance(df, window):
+def Portfolio_rebalance(df, window=60):
 
     '''
        Use this function to rebalance your portfolio.
@@ -142,7 +142,7 @@ def Portfolio_rebalance(df, window):
     y = df.SPX
     X = df.iloc[:, :-1]
 
-    for period in range(int(df.shape[0] / window)):
+    for period in range(int(df.shape[0] / window)-1):
 
         # Get the training period and OOS period
         X_train = X.iloc[window * period:window * (period + 1), :]
@@ -157,21 +157,21 @@ def Portfolio_rebalance(df, window):
         portfolio_weight = np.zeros(X.shape[0])
         y_predict = np.zeros(len(y))
 
+        model = LassoCV(cv = 5, random_state = 0, max_iter = 10000)
+        model.fit(X_train, y_train)
+        alpha_ = model.alpha_
 
-        lasso = Lasso(alpha = .05) 
-        lasso.fit(X_train, y_train)
+        lasso = Lasso(max_iter = 10000)
+        lasso.set_params(alpha=alpha_).fit(X_train,y_train)
         y_predict = lasso.predict(X_test)
         portfolio_weight = lasso.coef_
-    
-
-
 
         ##############################################################################
         #                               END OF YOUR CODE                             #
         ##############################################################################
 
         # Store the portfolio weight and OOS performance
-        Portfolio_performance.iloc[window * (period + 1):window * (period + 2)] = y_predict
+        Portfolio_performance.iloc[window * (period + 1):window * (period + 2)] = y_predict.reshape(60,1)
         Portfolio_weight.iloc[window * (period + 1), :] = portfolio_weight
 
     return Portfolio_weight, Portfolio_performance
